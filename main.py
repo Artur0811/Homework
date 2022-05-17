@@ -1,39 +1,58 @@
-class EternityBell:
-    def __init__(self, ri, size, vol):
-        self.ri = ri
-        self.size = size
-        self.vol = vol
-    def __iadd__(self, other):
-        return "A bell of size {} rings loudly ({}): ringing {}".format(self.size, self.vol, self.ri.capitalize()+"-"+other)
+class LifeGivingFire:
+    def __init__(self, color, firewood, T):
+        self.color = color
+        self.firewood = firewood
+        self.T = T
 
-    def __sub__(self, other):
-        if len(self.ri) < len(other.ri):
-            a = self.ri
-        if len(self.ri) == len(other.ri):
-            a = sorted([self.ri, other.ri])[0]
+    def __gt__(self, other):
+        if sorted([self.color, other.color])[0] == other.color or self.firewood > other.firewood or self.T > other.T:
+            return True
         else:
-            a = other.ri
-        return EternityBell(a, round((self.size+other.size)/2)-1, max(self.vol, other.vol))
-    def __mul__(self, num):
-        a = self.size//num
-        b = self.vol//num
-        if a < 1:
-            a = 1
-        if b == 0:
-            b = 1
-        return([EternityBell(self.ri,a, b)]*num)
+            return False
 
+    def __ge__(self, other):
+        if sorted([self.color, other.color])[0] == other.color or self.firewood >= other.firewood or self.T >= other.T:
+            return True
+        else:
+            return False
+
+    def __le__(self, other):
+        if sorted([self.color, other.color])[0] == self.color or self.firewood <= other.firewood or self.T <= other.T:
+            return True
+        else:
+            return False
+
+    def __lt__(self, other):
+        if sorted([self.color, other.color])[0] == self.color or self.firewood < other.firewood or self.T < other.T:
+            return True
+        else:
+            return False
+
+    def __ne__(self, other):
+        if self.color != other.color and self.firewood != other.firewood and self.T != other.T:
+            return True
+        else:
+            return False
+
+    def __eq__(self, other):
+        if self.color == other.color and self.firewood == other.firewood and self.T == other.T:
+            return True
+        else:
+            return False
+
+    def throw_wood(self, n):
+        self.firewood += n
+        self.T += n//10
+
+    def change_color(self, arg):
+        if len(arg) >= len(self.color):
+            self.color = arg
+            
     def __str__(self):
-        return "A bell of size {} rings loudly ({}): ringing {}".format(self.size, self.vol, self.ri.capitalize())
+        return "Life-Giving Fire with color of {} by {} of wood, burning for {}".format(self.color, self.firewood,self.T)
 
-    def __repr__(self):
-        return "EternityBell({},{},{})".format(self.ri, self.size, self.vol)
-
-
-etb = EternityBell("ding", 50, 16)
-etb1 = EternityBell("Dong", 33, 13)
-etb2 = etb - etb1
-print(etb, etb1, etb2, sep="\n")
-print()
-etb += "Dong"
-print(etb)
+lgf = LifeGivingFire("scarlet", 20, 5)
+lgf1 = LifeGivingFire("orange", 20, 5)
+print(lgf > lgf1, lgf == lgf1, lgf <= lgf1)
+lgf.throw_wood(17)
+print(lgf)
